@@ -25,7 +25,7 @@ private:
     SDL_Rect rect;
     inline SDL_Rect GetRectangle() const { return rect ;} 
     SDL_Texture *texture = nullptr; 
-    // SDL_Surface* surface = nullptr;
+    SDL_Surface* surface = nullptr;
 };
 
 #endif

@@ -8,15 +8,17 @@
 class ResourceManager{
 private:
     ResourceManager() ;
-    ResourceManager(ResourceManager const&);
-    ResourceManager operator=(ResourceManager const&) ;
+    ResourceManager(ResourceManager const&)= delete;
+    ResourceManager operator=(ResourceManager const&) = delete;
+    ~ResourceManager();
 public :
     static ResourceManager& GetInstance();
 
     SDL_Surface* GetSurface(std::string filepath);
 
 private :
-    std::unordered_map<std::string ,SDL_Surface* > mapper;
+    typedef std::unordered_map<std::string ,SDL_Surface* > Mapper;
+    Mapper mapper;
 };
 
 

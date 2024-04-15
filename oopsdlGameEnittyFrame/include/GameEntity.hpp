@@ -16,7 +16,11 @@ public:
     }
 
     ~GameEntity(){
-
+        std::cout << "Game Entity freed" << std::endl;
+        // delete m_renderer;
+        delete m_rect;
+        // delete m_renderer;
+        SDL_DestroyRenderer(m_renderer);
     }
 
     void update(){
@@ -32,7 +36,6 @@ public:
     TextureRectangle& GetTextureRectangle(){
         return *m_rect;
     }
-
 
 private:
     TextureRectangle* m_rect;

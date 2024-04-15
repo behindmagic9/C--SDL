@@ -81,6 +81,7 @@ void SDLApp::StopAppLoop()
 
 SDLApp::~SDLApp()
 {
+    SDL_DestroyRenderer(m_renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
 }

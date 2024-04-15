@@ -34,6 +34,7 @@ void HandleEvents()
             {
                 std::cout << "IS colidding " << std::endl;
             }
+         
             else
             {
                 std::cout << "not colliding " << std::endl;
@@ -99,9 +100,9 @@ int main()
 
     app->RunLoop();
 
-    delete app;
     delete rect;
     delete rect1;
+    delete app;
 
     return 0;
 }
