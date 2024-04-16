@@ -15,6 +15,7 @@ public:
     // update
     void update();
 
+
     void InitDefaults();
 
     void SetPosition(int x , int y );
@@ -24,6 +25,14 @@ public:
     int GetPositionY();
     int GetWidth();
     int GetHeight();
+    Uint8 GetRedColor();
+    Uint8 GetGreenColor();
+    Uint8 GetBlueColor();
+
+
+    SDL_Texture* GetSDLTexture();
+    SDL_Rect& GetSDLRect();
+    SDL_Rect* GetSDLRectPtr();
 
 // Destructor
     ~TextureRectangle();

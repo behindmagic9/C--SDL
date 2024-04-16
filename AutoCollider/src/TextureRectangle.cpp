@@ -69,6 +69,18 @@ void TextureRectangle::SetDimension(int w, int h)
     rect.h = h;
 }
 
+SDL_Rect* TextureRectangle::GetSDLRectPtr(){
+    return &rect;
+}
+
+SDL_Rect& TextureRectangle::GetSDLRect(){
+    return rect;
+}
+
+SDL_Texture* TextureRectangle::GetSDLTexture(){
+    return texture;
+}
+
 int TextureRectangle::GetPositionX(){
     return rect.x;
 }
@@ -85,8 +97,15 @@ int TextureRectangle::GetHeight(){
 
 }
 
-
-
+Uint8 TextureRectangle::GetRedColor(){
+    return m_red;
+}
+Uint8 TextureRectangle::GetBlueColor(){
+    return m_blue;
+}
+Uint8 TextureRectangle::GetGreenColor(){
+    return m_green;
+}
 void TextureRectangle::update()
 {
 }
@@ -99,7 +118,7 @@ void TextureRectangle::Render(SDL_Renderer *renderer)
 TextureRectangle::~TextureRectangle()
 {
     SDL_DestroyTexture(texture);
-    if (surface != nullptr)
+    if (nullptr != surface)
     {
         SDL_FreeSurface(surface);
     }

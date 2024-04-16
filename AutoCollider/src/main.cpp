@@ -4,6 +4,8 @@
 #include "../include/GameEntity.hpp"
 #include "../include/SDL_App.h"
 #include "../include/Animated_sprite.hpp"
+#include "../include/Vector2d.hpp"
+#include "../include/ResourceManager.hpp"
 #include <vector>
 #include <string>
 #include <memory>
@@ -30,14 +32,14 @@ void HandleEvents()
         }
         if (e.button.button == SDL_BUTTON_LEFT)
         {
-            if (rect1->GetCollider(0).isCollide(rect->GetCollider(0)))
+            if (rect1->GetCollider(0).IsColliding(rect->GetCollider(0)))
             {
                 std::cout << "IS colidding with hit box 1" << std::endl;
             }else{
                 std::cout <<  " nOt colliding with hit box 1" << std::endl;
             }
 
-            if(rect1->GetCollider(0).isCollide(rect->GetCollider(1))){
+            if(rect1->GetCollider(0).IsColliding(rect->GetCollider(1))){
                 std::cout << "is colliding with hit box 2" << std::endl;
             }
             else
@@ -51,8 +53,14 @@ void HandleEvents()
 void HandleRendering()
 {
 
-    rect->GetTextureRectangle().SetPosition(app->GetMouseX(),app->GetMouseY());
-    rect->GetTextureRectangle().SetDimension(100,100);
+    rect->Render();
+    rect1->Render();
+
+}
+
+void HandleUpdate(){
+    rect->update();
+    rect1->update();
 
     static bool up =true;
     static bool right = true;
@@ -83,30 +91,20 @@ void HandleRendering()
         up = false;
     }
 
-    rect1->GetTextureRectangle().SetPosition(posX,posY);
-    rect1->GetTextureRectangle().SetDimension(100,100);
+    rect1->SetPosition(posX,posY);
+    rect1->SetDimension(100,100);
 
-    rect->Render();
-    rect1->Render();
+    rect->SetPosition(app->GetMouseX(),app->GetMouseY());
+    rect->SetDimension(300,300);
 
-}
+    rect->GetCollider(1).SetDimension(rect->GetTextureRectangle().GetWidth(), rect->GetTextureRectangle().GetHeight()/2);
 
-void HandleUpdate(){
-    rect->update();
-    rect1->update();
+    Vector2d dims = rect->GetCollider(0).SetoundsAutomatically(ResourceManager::GetInstance().GetSurface("../Assets/kong.bmp"), 0xff,0x00,0xff);
 
-    rect->GetCollider(0).SetPosition(rect->GetTextureRectangle().GetPositionX(),rect->GetTextureRectangle().GetPositionY());
+    int newXpos = dims.x + app->GetMouseX();
+    int newYpos = dims.y + app->GetMouseY();
 
-    rect->GetCollider(0).SetDimension(rect->GetTextureRectangle().GetWidth(),rect->GetTextureRectangle().GetHeight()/2);
-    
-    rect->GetCollider(1).SetPosition(rect->GetTextureRectangle().GetPositionX(),rect->GetTextureRectangle().GetPositionY()+rect->GetTextureRectangle().GetHeight()/2);
-
-    rect->GetCollider(1).SetDimension(rect->GetTextureRectangle().GetWidth(),rect->GetTextureRectangle().GetHeight()/2);
-
-    rect1->GetCollider(0).SetPosition(rect1->GetTextureRectangle().GetPositionX(), rect1->GetTextureRectangle().GetPositionY());
-    rect1->GetCollider(0).SetDimension(rect1->GetTextureRectangle().GetWidth(),rect1->GetTextureRectangle().GetHeight());
-
-
+    rect->GetCollider(0).SetPosition(newXpos,newYpos);
 }
 
 int main()
@@ -132,8 +130,8 @@ int main()
     app->RunLoop();
 
     delete app;
-    delete rect;
     delete rect1;
+    delete rect;
 
     return 0;
 }

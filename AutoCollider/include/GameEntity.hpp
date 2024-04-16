@@ -19,18 +19,31 @@ public:
 
     void Render();
 
+
+    // Retrieve Components
     TextureRectangle& GetTextureRectangle();
 
-    Collider& GetCollider(size_t index);
-    void AddCollider2D() ; 
+    BoxCollider& GetCollider(size_t index);
+
+
+    // Update
+    // Note: Sets the position of our game entity
+    //       This operates by moving all of the
+    //       Components position as well so they are
+    //       updated.   
+    void SetPosition(int x , int y);
+    // Sets all of the components to a specified dimension
+    void SetDimension(int w , int h);
 
     void AddTextureRectangleConponent(std::string filepath);
     void AddTextureRectangleConponent(std::string filepath , Uint8 red, Uint8 green , Uint8 blue);
+    // Add another box collider to our object.
+    void AddCollider2D() ; 
 
 private:
     TextureRectangle* m_rect;
     SDL_Renderer* m_renderer;
-    std::vector<Collider*>  m_collider;
+    std::vector<BoxCollider*>  m_collider;
 };
 
 #endif
