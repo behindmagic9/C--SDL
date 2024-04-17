@@ -12,12 +12,12 @@
 
 SDLApp* app;
 
-GameEntity* rect;
-GameEntity* rect1;
+GameEntity* obj1; // game entioyt type containing its vector of collider like set fo more rectangles of that object type
+GameEntity* obj2;
 
 // before was
-// TextureRectangle* rect;
-// TextureRectangle* rect1;
+// TextureRectangle* obj1;
+// TextureRectangle* obj2;
 
 
 void HandleEvents()
@@ -32,14 +32,16 @@ void HandleEvents()
         }
         if (e.button.button == SDL_BUTTON_LEFT)
         {
-            if (rect1->GetCollider(0).IsColliding(rect->GetCollider(0)))
+            // checking object of obj2 's vector in which of its set of entity like "arrow" is stricking the other entity of type obj1 , in thats set of object particular 0 index object is colldign or not  with obj2's  index object 
+
+            if (obj2->GetCollider(0).IsColliding(obj1->GetCollider(0)))
             {
                 std::cout << "IS colidding with hit box 1" << std::endl;
             }else{
                 std::cout <<  " nOt colliding with hit box 1" << std::endl;
             }
 
-            if(rect1->GetCollider(0).IsColliding(rect->GetCollider(1))){
+            if(obj2->GetCollider(0).IsColliding(obj1->GetCollider(1))){
                 std::cout << "is colliding with hit box 2" << std::endl;
             }
             else
@@ -53,14 +55,14 @@ void HandleEvents()
 void HandleRendering()
 {
 
-    rect->Render();
-    rect1->Render();
+    obj1->Render();
+    obj2->Render();
 
 }
 
 void HandleUpdate(){
-    rect->update();
-    rect1->update();
+    obj1->update();
+    obj2->update();
 
     static bool up =true;
     static bool right = true;
@@ -90,21 +92,28 @@ void HandleUpdate(){
     }else if(posY < 0 ){
         up = false;
     }
+    // object which is moving all around the screen by itself
+    obj2->SetPosition(posX,posY);
+    obj2->SetDimension(100,100);
 
-    rect1->SetPosition(posX,posY);
-    rect1->SetDimension(100,100);
+    obj1->SetPosition(app->GetMouseX(),app->GetMouseY());
+    obj1->SetDimension(300,300);
 
-    rect->SetPosition(app->GetMouseX(),app->GetMouseY());
-    rect->SetDimension(300,300);
+// its givng the object 1 ehcih is moving with mouse the boadries like setting its dimension  adn its postionj is as set to the mosue poisiton , but boundaries are given now,
+// setting width of that too the wholeoriginal surface of kong without the SDL_St colorKey how look like ,  by GetTextureRectangle().GetWidth() and height of original surface divide by 2
+    obj1->GetCollider(1).SetDimension(obj1->GetTextureRectangle().GetWidth(), obj1->GetTextureRectangle().GetHeight()/2);
 
-    rect->GetCollider(1).SetDimension(rect->GetTextureRectangle().GetWidth(), rect->GetTextureRectangle().GetHeight()/2);
-
-    Vector2d dims = rect->GetCollider(0).SetoundsAutomatically(ResourceManager::GetInstance().GetSurface("../Assets/kong.bmp"), 0xff,0x00,0xff);
-
+// this be set the boundaries of the second boaundaries to the kong auto setting the boundaries especailly by a n algorithm
+    Vector2d dims = obj1->GetCollider(0).SetoundsAutomatically(ResourceManager::GetInstance().GetSurface("../Assets/kong.bmp"), 0xff,0x00,0xff);
+// then storing those dimesions of x and y to the vector2d of x and y mamber variables..
     int newXpos = dims.x + app->GetMouseX();
     int newYpos = dims.y + app->GetMouseY();
 
-    rect->GetCollider(0).SetPosition(newXpos,newYpos);
+    // so updated position  be like is dims.x + mousex coordinates
+    // same for y coordinates
+
+    // then setting the obj1 which is moving by mouse to the updates posx and posy of the rectangel of obj1's index 0 enity 's rectangle boundaries positon.
+    obj1->GetCollider(0).SetPosition(newXpos,newYpos);
 }
 
 int main()
@@ -113,14 +122,14 @@ int main()
     app = new SDLApp(title, 10, 10, 640, 480);
     app->SetMaxFrameRate(8);
 
-    rect = new GameEntity(app->GetRender()); // before was TextureRectange(app->GetRender(),....)
-    rect->AddTextureRectangleConponent("../Assets/kong.bmp", 0xff,0x00,0xff);
-    rect->AddCollider2D();
-    rect->AddCollider2D();
+    obj1 = new GameEntity(app->GetRender()); // before was TextureRectange(app->GetRender(),....)
+    obj1->AddTextureRectangleConponent("../Assets/kong.bmp", 0xff,0x00,0xff);
+    obj1->AddCollider2D();
+    obj1->AddCollider2D();
 
-    rect1 = new GameEntity(app->GetRender());
-    rect1->AddTextureRectangleConponent( "../Assets/kong.bmp");
-    rect1->AddCollider2D();
+    obj2 = new GameEntity(app->GetRender());
+    obj2->AddTextureRectangleConponent( "../Assets/kong.bmp"); // not given color key son not be transparent
+    obj2->AddCollider2D();
 
 
     app->SetEventCallback(HandleEvents);
@@ -130,8 +139,8 @@ int main()
     app->RunLoop();
 
     delete app;
-    delete rect1;
-    delete rect;
+    delete obj1;
+    delete obj2;
 
     return 0;
 }

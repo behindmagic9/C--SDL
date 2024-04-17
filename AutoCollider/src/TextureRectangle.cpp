@@ -5,7 +5,7 @@
 
 TextureRectangle::TextureRectangle(SDL_Renderer *renderer, std::string filepath)
 {
-    surface = ResourceManager::GetInstance().GetSurface(filepath.c_str());
+    SDL_Surface* surface = ResourceManager::GetInstance().GetSurface(filepath.c_str());
     if (surface != nullptr)
     {
         SDL_SetColorKey(surface,SDL_FALSE,SDL_MapRGB(surface->format ,m_red, m_blue , m_green));
@@ -18,7 +18,7 @@ TextureRectangle::TextureRectangle(SDL_Renderer *renderer, std::string filepath)
     InitDefaults();
 }
 TextureRectangle::TextureRectangle(SDL_Renderer *renderer, std::string filepath, Uint8 red, Uint8 blue , Uint8 green){
-    surface = ResourceManager::GetInstance().GetSurface(filepath.c_str());
+    SDL_Surface* surface = ResourceManager::GetInstance().GetSurface(filepath.c_str());
     if (surface != nullptr)
     {
         SDL_SetColorKey(surface,SDL_TRUE,SDL_MapRGB(surface->format ,red, blue , green));        

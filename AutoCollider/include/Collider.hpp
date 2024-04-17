@@ -75,7 +75,7 @@ public:
         SDL_LockSurface(surfaces);
         int w = surfaces->w;
         int h = surfaces->h;
-        int pitch = surfaces->pitch; // its the actual witdth of the image
+        int pitch = surfaces->pitch; // its the actual witdth of the image w*(r.b.g)
         int colorChannel = pitch / w;
         Uint8* pixels = (Uint8*)surfaces->pixels;
         // std::cout << "w: " << w << std::endl;

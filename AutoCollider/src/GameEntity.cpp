@@ -21,7 +21,9 @@ GameEntity::~GameEntity()
 
     for (int i = 0; i < m_collider.size(); i++)
     {
-        delete m_collider[i];
+        if (nullptr != m_collider[i]){
+            delete m_collider[i];
+        }
     }
 }
 
@@ -51,8 +53,9 @@ void GameEntity::Render()
         if (nullptr != m_collider[i])
         {
             // m_collider->Render(m_renderer);
+            // its just giginvg color to the rectangle bpox around that 
             SDL_SetRenderDrawColor(m_renderer, 0xFF, 0, 0xFF, SDL_ALPHA_OPAQUE);
-            SDL_RenderDrawRect(m_renderer, &m_collider[i]->GetCollideBox());
+            SDL_RenderDrawRect(m_renderer, &m_collider[i]->GetCollideBox());// give the rect to that Collider object
         }
     }
 }

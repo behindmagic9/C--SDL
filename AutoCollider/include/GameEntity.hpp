@@ -19,12 +19,10 @@ public:
 
     void Render();
 
-
     // Retrieve Components
     TextureRectangle& GetTextureRectangle();
 
     BoxCollider& GetCollider(size_t index);
-
 
     // Update
     // Note: Sets the position of our game entity
