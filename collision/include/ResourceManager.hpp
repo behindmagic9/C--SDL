@@ -16,7 +16,8 @@ public :
     SDL_Surface* GetSurface(std::string filepath);
 
 private :
-    std::unordered_map<std::string ,SDL_Surface* > mapper;
+    typedef std::unordered_map<std::string ,SDL_Surface* > Mapper;
+    Mapper mapper;
 };
 
 

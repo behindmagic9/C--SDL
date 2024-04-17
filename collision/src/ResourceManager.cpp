@@ -17,6 +17,15 @@ ResourceManager& ResourceManager::GetInstance(){
     return *s_instance;
 }
 
+ResourceManager::~ResourceManager(){
+    Mapper::iterator it = mapper.begin();
+    for(;it != mapper.end();++it){
+        SDL_FreeSurface(it->second);
+    }
+    mapper.clear();
+}
+
+
 SDL_Surface* ResourceManager::GetSurface(std::string filepath){
     auto search = mapper.find(filepath);
     if(search != mapper.end()){

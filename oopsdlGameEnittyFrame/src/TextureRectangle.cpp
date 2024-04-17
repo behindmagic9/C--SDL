@@ -5,7 +5,7 @@
 
 TextureRectangle::TextureRectangle(SDL_Renderer *renderer, std::string filepath)
 {
-    surface  = ResourceManager::GetInstance().GetSurface(filepath.c_str());
+    SDL_Surface* surface  = ResourceManager::GetInstance().GetSurface(filepath.c_str());
     if(surface){
         texture = SDL_CreateTextureFromSurface(renderer, surface);
     }else{

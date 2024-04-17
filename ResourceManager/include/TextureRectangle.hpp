@@ -7,11 +7,11 @@ class TextureRectangle
 {
 public:
 // constructor
-    TextureRectangle(SDL_Renderer *&renderer, std::string filepath);
+    TextureRectangle(SDL_Renderer *renderer, std::string filepath);
 // set Rectangle
     void SetRectangle(int x, int y, int w, int h);
     // render
-    void render(SDL_Renderer*& renderer);
+    void render(SDL_Renderer* renderer);
     // update
     void update();
 
@@ -21,7 +21,6 @@ public:
 private:
     SDL_Rect rect;
     SDL_Texture *texture = nullptr; 
-    SDL_Surface* surface = nullptr;
 };
 
 #endif

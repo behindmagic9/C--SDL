@@ -10,6 +10,7 @@ Animated_Sprite::Animated_Sprite(SDL_Renderer *&renderer, std::string filepath)
     SDL_SetColorKey(surface,SDL_TRUE,SDL_MapRGB(surface->format,241,216,98));
     texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
+    std::cout << "surface freed" << std::endl;
 }
 void Animated_Sprite::Draw(int x, int y, int w, int h)
 {

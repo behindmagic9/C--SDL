@@ -118,8 +118,4 @@ void TextureRectangle::Render(SDL_Renderer *renderer)
 TextureRectangle::~TextureRectangle()
 {
     SDL_DestroyTexture(texture);
-    if (nullptr != surface)
-    {
-        SDL_FreeSurface(surface);
-    }
 }

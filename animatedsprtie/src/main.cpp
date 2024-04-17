@@ -51,7 +51,6 @@ int main()
             frame = 0;
         }
 
-
         SDL_RenderPresent(renderer);
 
         SDL_Delay(100);
