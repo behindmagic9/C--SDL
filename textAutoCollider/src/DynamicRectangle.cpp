@@ -9,8 +9,9 @@ DynamicText::DynamicText(std::string filepath, size_t fontsize)
     {
         std::cout << "could not initialised the SDL2 tff error" << TTF_GetError() << std::endl;
     }
-    else
+    else if(!s_ttfinitialised)
     {
+        std::cout << "SDL ttf initialsed once " << std::endl;
         // decalre static so only once  be intiliase , even if have multiple font objects
         s_ttfinitialised = true;
     }
