@@ -9,6 +9,7 @@
 
 class GameEntity{
 public:
+
     GameEntity();
 
     GameEntity(SDL_Renderer* renderer);
@@ -34,7 +35,9 @@ public:
     void SetDimension(int w , int h);
 
     void AddTextureRectangleConponent(std::string filepath);
+    
     void AddTextureRectangleConponent(std::string filepath , Uint8 red, Uint8 green , Uint8 blue);
+    
     // Add another box collider to our object.
     void AddCollider2D() ; 
 

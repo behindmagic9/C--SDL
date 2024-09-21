@@ -36,10 +36,10 @@ SDL_Surface* ResourceManager::GetSurface(std::string filepath){
         return mapper[filepath];
     }
     return nullptr;
-
 }
 
 // for perfomance as storing the suface s in the cache so as to not go through each time with those mapper iteration and finding in the disk
+
 /*
 
 ResourceManager& ResourceManager::GetInstance() {
@@ -65,6 +65,7 @@ SDL_Surface* ResourceManager::GetSurface(const std::string& filepath) {
 }
 
 */
+
 void ResourceManager::ReleaseSurface(const std::string& filepath) {
     auto search = mapper.find(filepath);
     if (search != mapper.end()) {

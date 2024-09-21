@@ -29,5 +29,6 @@ private :
     std::unordered_set<SDL_Surface*> CachedSurfaces;
 };
 
-
 #endif
+
+

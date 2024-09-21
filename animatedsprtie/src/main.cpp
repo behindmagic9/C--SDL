@@ -24,7 +24,6 @@ int main()
     
     animate.Draw(200,200,150,150);
 
-
     bool isGameRunning = true;
     while (isGameRunning)
     {
