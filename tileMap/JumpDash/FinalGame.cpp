@@ -170,7 +170,7 @@ struct Tiles
 
     void updateVerticalPosition(float deltaTime)
     {
-        if (deltaTime > 8000)
+        if (deltaTime > 2000)
         {                          
             float speed = 0.1f;      
             float amplitude = 100.0f; 
