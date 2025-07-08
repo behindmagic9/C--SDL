@@ -23,6 +23,43 @@ const int TILE_GAP = 180;
 const int PASSAGE_GAP = 250;
 int score = 0;
 
+struct SmokeParticle
+{
+    float x, y;
+    int lifetime;
+    float alpha; // Opacity of the smoke particle
+    SDL_Rect smoke_rect;
+    SDL_Texture *texture;
+    SDL_Renderer *renderer;
+
+    SmokeParticle(float x, float y, SDL_Renderer *renderer, SDL_Texture *texture)
+        : x(x), y(y), renderer(renderer), texture(texture), lifetime(50), alpha(255)
+    {
+        smoke_rect = {static_cast<int>(x), static_cast<int>(y), 10, 10}; // Size of the smoke
+    }
+
+    void update()
+    {
+        y -= 1.2f;     // Make smoke drift upwards
+        x -= 50;
+        alpha -= 2.5f; // Gradually decrease opacity
+        if (alpha < 0)
+            alpha = 0;
+        lifetime--;
+    }
+
+    void render()
+    {
+        SDL_SetTextureAlphaMod(texture, static_cast<Uint8>(alpha)); // Set opacity
+        SDL_RenderCopy(renderer, texture, nullptr, &smoke_rect);
+    }
+
+    bool isDead()
+    {
+        return lifetime <= 0;
+    }
+};
+
 int getRandomHeight()
 {
     return (rand() % 200) + 100;
@@ -54,7 +91,8 @@ struct Car
         // SDL_Surface *car_surface = SDL_LoadBMP(path.c_str());
 
         SDL_Surface *car_surface = SDL_LoadBMP(path.c_str());
-        if(!car_surface){
+        if (!car_surface)
+        {
             std::cout << "surface not loaded" << std::endl;
         }
         SDL_SetColorKey(car_surface, SDL_TRUE, SDL_MapRGB(car_surface->format, 0x00, 0x00, 0x00));
@@ -327,22 +365,26 @@ int main(int argc, char *argv[])
     SDL_Rect snow_rect1 = {0, 0, 1280, 720};
     SDL_Rect snow_rect2 = {1280, 0, 1280, 720};
 
-    SDL_Surface* background_surface = SDL_LoadBMP("images/background1.bmp");
-    SDL_Texture* background = SDL_CreateTextureFromSurface(renderer, background_surface);
-    SDL_FreeSurface(background_surface);   
-    SDL_Rect background1 = {0,0,1280,720};
+    SDL_Surface *background_surface = SDL_LoadBMP("images/background1.bmp");
+    SDL_Texture *background = SDL_CreateTextureFromSurface(renderer, background_surface);
+    SDL_FreeSurface(background_surface);
+    SDL_Rect background1 = {0, 0, 1280, 720};
 
-
-    SDL_Surface* start_surface = SDL_LoadBMP("images/startScreen.bmp");
-    SDL_Texture* start_Screen = SDL_CreateTextureFromSurface(renderer, start_surface);
+    SDL_Surface *start_surface = SDL_LoadBMP("images/startScreen.bmp");
+    SDL_Texture *start_Screen = SDL_CreateTextureFromSurface(renderer, start_surface);
     SDL_FreeSurface(start_surface);
-    SDL_Rect start_rect = {0,0,1280,720};
+    SDL_Rect start_rect = {0, 0, 1280, 720};
 
-
-    SDL_Surface* End_surface = SDL_LoadBMP("images/GameOver.bmp");
-    SDL_Texture* End_Screen = SDL_CreateTextureFromSurface(renderer, End_surface);
+    SDL_Surface *End_surface = SDL_LoadBMP("images/GameOver.bmp");
+    SDL_Texture *End_Screen = SDL_CreateTextureFromSurface(renderer, End_surface);
     SDL_FreeSurface(End_surface);
-    SDL_Rect Over_rect = {0,0,1280,720};
+    SDL_Rect Over_rect = {0, 0, 1280, 720};
+
+    SDL_Surface *smoke_surface = SDL_LoadBMP("images/smoke.bmp"); // Load the smoke texture
+    SDL_SetColorKey(smoke_surface, SDL_TRUE, SDL_MapRGB(smoke_surface->format, 0x00, 0x00, 0x00));
+    SDL_Texture *smoke_texture = SDL_CreateTextureFromSurface(renderer, smoke_surface);
+    SDL_FreeSurface(smoke_surface);
+    std::vector<SmokeParticle> smokeParticles;
 
     std::vector<Tiles> tiles_vector_top;
     std::vector<Tiles> tiles_vector_bottom;
@@ -366,6 +408,7 @@ int main(int argc, char *argv[])
         top_tile.Load("images/wall1.bmp");
         tiles_vector_top.push_back(top_tile);
     }
+
 
     bool GameIsRunning = true;
     SDL_Event event;
@@ -437,10 +480,25 @@ int main(int argc, char *argv[])
             // rendering the background
             SDL_RenderCopy(renderer, background, nullptr, &background1);
 
-
             car.Update();
             car.Render();
 
+            // smokeParticles.push_back(SmokeParticle(car.car_rect.x - 50, car.car_rect.y + car.car_rect.h, renderer, smoke_texture));
+            // for (auto it = smokeParticles.begin(); it != smokeParticles.end();)
+            // {
+            //     it->update();
+            //     it->render();
+
+            //     // Remove dead smoke particles
+            //     if (it->isDead())
+            //     {
+            //         it = smokeParticles.erase(it);
+            //     }
+            //     else
+            //     {
+            //         ++it;
+            //     }
+            // }
             for (auto &tiles : tiles_vector_bottom)
             {
                 tiles.updatePosition(2);
@@ -485,7 +543,6 @@ int main(int argc, char *argv[])
             {
                 snow_rect2.x = snow_rect1.x + snow_rect1.w; // Move behind the first snow texture
             }
-
 
             if (!tiles_vector_top.empty() && tiles_vector_bottom.front().rect.x + TILE_WIDTH < 0)
             { // seeing if tiles last pixel is out of the screen so that to load it again or recycle it agian
@@ -537,7 +594,7 @@ int main(int argc, char *argv[])
             else
             {
                 // After the freeze duration, render the Game Over text
-                SDL_RenderCopy(renderer, End_Screen, nullptr,&Over_rect);
+                SDL_RenderCopy(renderer, End_Screen, nullptr, &Over_rect);
                 RenderText(renderer, "Game Over!", 200, 200, font);
                 std::string stringscore = std::to_string(score);
                 RenderText(renderer, "YOUR HIGHSCORE IS :  " + stringscore, 200, 400, font);
